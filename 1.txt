@@ -1,0 +1,28 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JSP Function Example</title>
+</head>
+<body>
+
+<%-- Define variables --%>
+<%
+    int id = 101;
+    String name = "Mohamed";
+%>
+
+<%! 
+    // Function to concatenate id and name
+    String concatIdName(int id, String name) {
+        return id + " - " + name;
+    }
+%>
+
+<%-- Call function and print result --%>
+<p>Result: <%= concatIdName(id, name) %></p>
+
+</body>
+</html>

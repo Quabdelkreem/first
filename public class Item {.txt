@@ -1,0 +1,75 @@
+public class Item {
+    private int id;
+    private String name;
+    private double price;
+
+    // constructor
+    public Item(int id, String name, double price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+
+    // getters
+    public int getId() { return id; }
+    public String getName() { return name; }
+    public double getPrice() { return price; }
+
+    // toString
+    @Override
+    public String toString() {
+        return "Item{id=" + id + ", name='" + name + "', price=" + price + "}";
+    }
+}
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class ItemUtilService {
+
+    private List<Item> items = new ArrayList<>();
+
+    // Save list of items
+    public void saveItems(List<Item> newItems) {
+        items.addAll(newItems);
+    }
+
+    // Get items where id in (1,2)
+    public List<Item> getItemsWithId1Or2() {
+        return items.stream()
+                .filter(i -> i.getId() == 1 || i.getId() == 2)
+                .collect(Collectors.toList());
+    }
+
+    // Get items where name contains 'i'
+    public List<Item> getItemsWithNameContainingI() {
+        return items.stream()
+                .filter(i -> i.getName().toLowerCase().contains("i"))
+                .collect(Collectors.toList());
+    }
+
+    // Get items where price > 50 and < 20 (⚠️ condition is contradictory, maybe you meant <50 and >20?)
+    public List<Item> getItemsWithPriceBetween20And50() {
+        return items.stream()
+                .filter(i -> i.getPrice() > 20 && i.getPrice() < 50)
+                .collect(Collectors.toList());
+    }
+}
+import java.util.Arrays;
+
+public class Main {
+    public static void main(String[] args) {
+        ItemUtilService service = new ItemUtilService();
+
+        service.saveItems(Arrays.asList(
+                new Item(1, "Pizza", 15),
+                new Item(2, "IceCream", 25),
+                new Item(3, "Burger", 55),
+                new Item(4, "Juice", 30)
+        ));
+
+        System.out.println("ID in 1 or 2: " + service.getItemsWithId1Or2());
+        System.out.println("Name contains 'i': " + service.getItemsWithNameContainingI());
+        System.out.println("Price between 20 and 50: " + service.getItemsWithPriceBetween20And50());
+    }
+}

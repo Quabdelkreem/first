@@ -1,0 +1,61 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Order Food</title>
+</head>
+<body>
+
+<h2>Order Food</h2>
+
+<form action="allorders.jsp" method="post">
+    <label>Enter Food:</label>
+    <input type="text" name="food" required>
+    <input type="submit" value="Add Order">
+</form>
+
+</body>
+</html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.util.*" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>All Orders</title>
+</head>
+<body>
+
+<h2>All Food Orders (This Session)</h2>
+
+<%
+    // Get session object
+    HttpSession sess = request.getSession();
+
+    // Retrieve or create order list
+    List<String> orders = (List<String>) sess.getAttribute("orders");
+    if (orders == null) {
+        orders = new ArrayList<>();
+        sess.setAttribute("orders", orders);
+    }
+
+    // Add new food if submitted
+    String newFood = request.getParameter("food");
+    if (newFood != null && !newFood.trim().isEmpty()) {
+        orders.add(newFood);
+    }
+%>
+
+<ul>
+<% for(String food : orders) { %>
+    <li><%= food %></li>
+<% } %>
+</ul>
+
+<a href="order.jsp">Add More Orders</a>
+
+</body>
+</html>
