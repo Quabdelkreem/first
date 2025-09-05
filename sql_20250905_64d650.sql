@@ -1,0 +1,31 @@
+-- Create USERS table
+CREATE TABLE USERS (
+    id NUMBER PRIMARY KEY,
+    name VARCHAR2(100) NOT NULL,
+    email VARCHAR2(100) UNIQUE NOT NULL,
+    password VARCHAR2(255) NOT NULL
+);
+
+CREATE SEQUENCE users_seq START WITH 1 INCREMENT BY 1;
+
+-- Create ITEM table
+CREATE TABLE ITEM (
+    id NUMBER PRIMARY KEY,
+    name VARCHAR2(100) NOT NULL,
+    price NUMBER(10, 2) NOT NULL,
+    quantity NUMBER NOT NULL
+);
+
+CREATE SEQUENCE item_seq START WITH 1 INCREMENT BY 1;
+
+-- Create ITEM_DETAILS table with one-to-one relationship
+CREATE TABLE ITEM_DETAILS (
+    id NUMBER PRIMARY KEY,
+    item_id NUMBER UNIQUE NOT NULL,
+    description VARCHAR2(500),
+    issue_date DATE,
+    expiry_date DATE,
+    CONSTRAINT fk_item FOREIGN KEY (item_id) REFERENCES ITEM(id) ON DELETE CASCADE
+);
+
+CREATE SEQUENCE item_details_seq START WITH 1 INCREMENT BY 1;
