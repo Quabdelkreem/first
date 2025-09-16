@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Items</title>
+</head>
+<body>
+  <h1>Items</h1>
+  <div>
+    <form id="create-form">
+      <input type="text" id="itemName" placeholder="Item name" required />
+      <button type="submit">Create Item</button>
+    </form>
+  </div>
+  <hr>
+  <ul id="items"></ul>
+
+  <script>
+    async function fetchItems(){
+      const res = await fetch('items');
+      const data = await res.json();
+      const list = document.getElementById('items');
+      list.innerHTML='';
+      data.forEach(it => {
+        const li = document.createElement('li');
+        li.innerHTML = '<strong>' + it.name + '</strong>' +
+          (it.hasDetails ? ' <em>(has details)</em>' : ' <em>(no details)</em>') +
+          ' <button data-id="'+it.id+'" class="add">'+(it.hasDetails ? 'Update Details' : 'Add Details')+'</button>' +
+          ' <button data-id="'+it.id+'" class="del">Delete</button>';
+        list.appendChild(li);
+      });
+    }
+    document.getElementById('create-form').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const name = document.getElementById('itemName').value.trim();
+      if(!name) return;
+      await fetch('items', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name})});
+      e.target.reset();
+      fetchItems();
+    });
+    document.getElementById('items').addEventListener('click', async (e)=>{
+      const id = e.target.getAttribute('data-id');
+      if(e.target.className === 'del'){
+        await fetch('items?id='+id, {method:'DELETE'});
+        fetchItems();
+      } else if(e.target.className === 'add'){
+        const key = prompt('Detail key:');
+        if(!key) return;
+        const value = prompt('Detail value:');
+        await fetch('items/details', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({itemId:id, key, value})});
+        fetchItems();
+      }
+    });
+    fetchItems();
+  </script>
+</body>
+</html>
